@@ -28,6 +28,7 @@ class Unity:
 
     def process_response(self, response):
         """ Process the HTTPS response and set headers or raise exceptions """ 
+        # TODO: work with Exceptions for easier troubleshooting
         response.raise_for_status()
 
         if 'EMC-CSRF-TOKEN' not in self.headers:
@@ -90,6 +91,7 @@ class Unity:
                                             headers = self.headers,
                                             params = payload)
         else: # For POST requests, we pass data, not payload
+            payload = json.dumps(payload)
             if self.is_auth:
                 response = request_function(url, verify = False,
                                             headers = self.headers,
@@ -106,16 +108,15 @@ class Unity:
 
     def get(self, url_path, payload = None):
         """ Wrapper for performing a GET unity request """
-        self.unity_request(url_path, method='GET', payload = payload)
+        return self.unity_request(url_path, method='GET', payload = payload)
 
     def post(self, url_path, payload = None):
         """ Wrapper for performing a POST unity request """
-        self.unity_request(url_path, method='POST', payload = payload)
+        return self.unity_request(url_path, method='POST', payload = payload)
 
     def delete(self, url_path, payload = None):
         """ Wrapper for performing a DELETE unity request """
-        self.unity_request(url_path, method='DELETE', payload = payload)
-
+        return self.unity_request(url_path, method='DELETE', payload = payload)
 
     def get_object(self, unity_type, item_filter = None, item_id=None, item_name=None):
         """ Get an object (singular or a collection) """
@@ -381,68 +382,314 @@ class Unity:
         return self.get_object('quotaConfig',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
 
-
-
-
-
-    def feature(self, item_filter = None, item_id=None, item_name=None):
-        return self.get_object('feature',item_filter=item_filter,
+    def raidGroup(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('raidGroup',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
 
-    def basicSystemInfo(self, item_filter = None, item_id=None, item_name=None):
-        return self.get_object('basicSystemInfo',item_filter=item_filter,
+    def storageResource(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('storageResource',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def storageResourceCapabilityProfile(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('storageResourceCapabilityProfile',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def storageTier(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('storageTier',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def treeQuota(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('treeQuota',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def userQuota(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('userQuota',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def virtualVolume(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('virtualVolume',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    # Environment Management
+    def battery(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('battery',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def dae(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('dae',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def disk(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('disk',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def dpe(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('dpe',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def encryption(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('encryption',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
 
     def ethernetPort(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('ethernetPort',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
 
-    def metric(self, item_filter = None, item_id=None, item_name=None):
-        return self.get_object('metric', item_filter=item_filter,
+    def fan(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('fan',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
 
-    def statspaths(self, filt = None):
-        if filt: 
-            stats_filter = 'path lk "%s" && isRealtimeAvailable eq true' % filt
-        else:
-            stats_filter = 'isRealtimeAvailable eq true'
+    def fcPort(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('fcPort',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
 
-        r = self.get('/types/metric/instances', {'fields':'path', 'filter':stats_filter})
+    def ioModule(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('ioModule',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
 
-        stat_paths = []
-        for i in r.json()['entries']:
-            stat_paths.append(i['content']['path'])
+    def lcc(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('lcc',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
 
-        return stat_paths
+    def memoryModule(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('memoryModule',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
 
-    def create_rt_query(self, statspaths, interval):
-        """ Creates a RealtimeQuery on the Unity array, returns the new ID """
-        payload = json.dumps({'paths':statspaths,'interval':interval})
-        r = unity.post('/types/metricRealTimeQuery/instances',payload)
-        return r.json()['content']['id']
+    def powerSupply(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('powerSupply',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
 
-    def query_stats(self,query_id):
-        r = self.get('/types/metricQueryResult/instances',{'filter':'queryId eq %s' % str(query_id)})
-        data = r.json()
-        for i in data['entries']:
-            print i['content']
+    def sasPort(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('sasPort',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
 
-    def remove_rt_query(self, query_id):
-        r = self.delete('/types/metricRealTimeQuery/instances',query_id)
-            
-    def destroy_lun(resource_id):
-        r = self.delete('/instances/storageResource/%s', resource_id)
-        return r 
+    def ssc(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('ssc',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
 
-    def create_block_lun(lun_name, pool_id, size):
-        ''' Creates a new block LUN in pool_id, returns the StorageResource id '''
-        payload = json.dumps({'name':lun_name,
-                              'lunParameters':{'pool':{'id':pool_id},
-                              'size':size}})
-                            
-        r = unity.post('/types/storageResource/action/createLun',payload)
-        return r.json()['content']['storageResource']['id']
+    def ssd(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('ssd',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
 
+    def storageProcessor(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('storageProcessor',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def uncommittedPort(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('uncommittedPort',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    # Managing the System
+    def basicSystemInfo(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('basicSystemInfo',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def candidateSoftwareVersion(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('candidateSoftwareVersion',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def feature(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('feature',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def installedSoftwareVersion(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('installedSoftwareVersion',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def license(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('license',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+    def ntpServer(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('ntpServer',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def remoteSyslog(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('remoteSyslog',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def serviceContract(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('serviceContract',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def softwareUpgradeSession(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('softwareUpgradeSession',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def system(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('system',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def systemInformation(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('systemInformation',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def systemLimit(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('systemLimit',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def systemTime(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('systemTime',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    # Monitoring capacity and performance
+    def metric(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('metric',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def metricCollection(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('metricCollection',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def metricQueryResult(self, item_filter = None, item_id=None, item_name=None):
+        """ metricQueryResult is an odd request, as it REQUIRES a specific filter
+            to be passed to it.  For the user, we're taking that as either a part
+            of the filter, or we're creating the filter for them """
+
+        if item_id:
+            if "queryId" not in item_filter:
+                if item_filter:
+                    item_filter = "queryId EQ %s && %s" % (item_id, item_filter)
+                else:
+                    item_filter = "queryId EQ %s" % item_id
+        
+        if "queryId" not in item_filter:
+            # TODO, we really should throw an exception here
+            return None
+
+        return self.get_object('metricQueryResult',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def metricRealTimeQuery(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('metricRealTimeQuery',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def metricService(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('metricService',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def metricValue(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('metricValue',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    # Protecting Data
+    def ldapServer(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('ldapServer',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def remoteInterface(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('remoteInterface',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def replicationInterface(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('replicationInterface',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def replicationSession(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('replicationSession',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def snap(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('snap',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def snapSchedule(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('snapSchedule',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    # Quality of Service
+    def ioLimitPolicy(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('ioLimitPolicy',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def ioLimitRule(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('ioLimitRule',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def ioLimitSetting(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('ioLimitSetting',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    # Servicing the System
+    def configCaptureResult(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('configCaptureResult',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def dataCollectionResult(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('dataCollectionResult',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def esrsParam(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('esrsParam',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def esrsPolicymanager(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('esrsPolicymanager',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def serviceAction(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('serviceAction',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def serviceInfo(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('serviceInfo',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def supportAsset(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('supportAsset',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def supportService(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('supportService',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def technicalAdvisory(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('technicalAdvisory',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    # Users and Security
+    def crl(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('crl',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def loginSessionInfo(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('loginSessionInfo',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def role(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('role',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def roleMapping(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('roleMapping',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def securitySettings(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('securitySettings',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def user(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('user',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    def x509Certificate(self, item_filter = None, item_id=None, item_name=None):
+        return self.get_object('x509Certificate',item_filter=item_filter,
+                               item_id=item_id, item_name=item_name)
+
+    # Helper Functions
+    def delete_lun(self, lun_id):
+        response = self.delete('/instances/storageResource/%s' % lun_id)
+        return response
+
+    def create_lun(self, lun_name, pool_id, size, lun_description=None):
+        """ Creates a new block LUN in pool_id, returns a lun object """
+        payload = {'name':lun_name,
+                   'lunParameters':{'pool':{'id':pool_id},
+                   'size':size}}
+
+        response = self.post('/types/storageResource/action/createLun',payload)
+
+        new_id = response.json()['content']['storageResource']['id']
+        return self.lun(item_id=new_id)
         
     def __repr__(self):
         return "<Unity Array: %s>" % self.ip_addr
