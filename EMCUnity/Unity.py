@@ -676,8 +676,14 @@ class Unity:
                                item_id=item_id, item_name=item_name)
 
     # Helper Functions
-    def delete_lun(self, lun_id):
+
+    def delete_storageResource(self, lun_id):
         response = self.delete('/instances/storageResource/%s' % lun_id)
+        return response
+
+    def delete_lun(self, lun_id):
+        """ Deletes a LUN based on the lun_id """
+        response = self.delete_storageResource(lun_id)
         return response
 
     def create_lun(self, lun_name, pool_id, size, lun_description=None):
@@ -690,7 +696,18 @@ class Unity:
 
         new_id = response.json()['content']['storageResource']['id']
         return self.lun(item_id=new_id)
-        
+
+    def create_lun(self, lun_object):
+        """ Creates a new block LUN based on a lun_object being passed """
+        payload = {'name': lun_object.name,
+                   'lunParameters':{'pool':{'id':lun_object.pool},
+                                    'size': lun_object.sizeTotal}}
+
+        response = self.post('/types/storageResource/action/createLun',payload)
+
+        new_id = response.json()['content']['storageResource']['id']
+        return self.lun(item_id=new_id)
+
     def __repr__(self):
         return "<Unity Array: %s>" % self.ip_addr
         
