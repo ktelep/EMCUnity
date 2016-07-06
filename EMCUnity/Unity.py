@@ -27,7 +27,7 @@ class Unity:
         self.software = sys_info['content']['softwareVersion']
 
     def process_response(self, response):
-        """ Process the HTTPS response and set headers or raise exceptions """ 
+        """ Process the HTTPS response and set headers or raise exceptions """
         # TODO: work with Exceptions for easier troubleshooting
         response.raise_for_status()
 
@@ -36,9 +36,9 @@ class Unity:
             self.is_auth = True
 
         return
- 
+
     def get_from_type(self, url_path, object_type, payload = None):
-        """ 
+        """
         Performs a request of all fields for a given object_type unless
         specific fields have been requested as part of the payload
         """
@@ -59,7 +59,7 @@ class Unity:
 
         elif 'content' in response:
             return object_type(**response['content'])
-        
+
         else:
             return None
 
@@ -82,12 +82,12 @@ class Unity:
 
         if method != 'POST':
             if self.is_auth:
-                response = request_function(url, verify = False, 
-                                            headers = self.headers, 
+                response = request_function(url, verify = False,
+                                            headers = self.headers,
                                             params = payload)
             else:
-                response = request_function(url, verify = False, 
-                                            auth = (self.username, self.password), 
+                response = request_function(url, verify = False,
+                                            auth = (self.username, self.password),
                                             headers = self.headers,
                                             params = payload)
         else: # For POST requests, we pass data, not payload
@@ -97,14 +97,14 @@ class Unity:
                                             headers = self.headers,
                                             data = payload)
             else:
-                response = request_function(url, verify = False, 
-                                            auth = (self.username, self.password), 
-                                            headers = self.headers, 
+                response = request_function(url, verify = False,
+                                            auth = (self.username, self.password),
+                                            headers = self.headers,
                                             data = payload)
-            
+
         self.process_response(response)
 
-        return response     
+        return response
 
     def get(self, url_path, payload = None):
         """ Wrapper for performing a GET unity request """
@@ -146,6 +146,7 @@ class Unity:
         return response
 
     # Network communications
+    # -----------------------------------------
     def cifsServer(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('cifsServer',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
@@ -161,7 +162,7 @@ class Unity:
     def fileInterface(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('fileInterface',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
-    
+
     def fileKerberosServer(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('fileKerberosServer',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
@@ -177,7 +178,7 @@ class Unity:
     def fileNISServer(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('fileNISServer',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
-    
+
     def ftpServer(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('ftpServer',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
@@ -193,7 +194,7 @@ class Unity:
     def iscsiNode(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('iscsiNode',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
-    
+
     def iscsiPortal(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('iscsiPortal',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
@@ -205,7 +206,7 @@ class Unity:
     def linkAggregation(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('linkAggregation',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
-    
+
     def mgmtInterface(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('mgmtInterface',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
@@ -213,7 +214,7 @@ class Unity:
     def mgmtInterfaceSettings(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('mgmtInterfaceSettings',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
-    
+
     def nasServer(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('nasServer',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
@@ -245,8 +246,9 @@ class Unity:
     def vmwareNasPEServer(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('vmwareNasPEServer',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
-    
+
     # Events and Alerts
+    # -----------------------------------------
     def alert(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('alert',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
@@ -264,11 +266,13 @@ class Unity:
                                item_id=item_id, item_name=item_name)
 
     # Jobs
+    # -----------------------------------------
     def job(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('job',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
 
     # Remote Systems
+    # -----------------------------------------
     def cifsShare(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('cifsShare',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
@@ -330,6 +334,7 @@ class Unity:
                                item_id=item_id, item_name=item_name)
 
     # Storage Management
+    # -----------------------------------------
     def aclUser(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('aclUser',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
@@ -337,7 +342,7 @@ class Unity:
     def capabilityProfile(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('capabilityProfile',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
-    
+
     def dhsmServer(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('dhsmServer',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
@@ -349,7 +354,7 @@ class Unity:
     def fastCache(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('fastCache',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
-                               
+
     def fastVP(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('fastVP',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
@@ -369,7 +374,7 @@ class Unity:
     def poolConsumer(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('poolConsumer',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
-                               
+
     def poolConsumerAllocation(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('poolConsumerAllocation',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
@@ -411,6 +416,7 @@ class Unity:
                                item_id=item_id, item_name=item_name)
 
     # Environment Management
+    # -----------------------------------------
     def battery(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('battery',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
@@ -480,6 +486,7 @@ class Unity:
                                item_id=item_id, item_name=item_name)
 
     # Managing the System
+    # -----------------------------------------
     def basicSystemInfo(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('basicSystemInfo',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
@@ -532,6 +539,7 @@ class Unity:
                                item_id=item_id, item_name=item_name)
 
     # Monitoring capacity and performance
+    # -----------------------------------------
     def metric(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('metric',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
@@ -551,7 +559,7 @@ class Unity:
                     item_filter = "queryId EQ %s && %s" % (item_id, item_filter)
                 else:
                     item_filter = "queryId EQ %s" % item_id
-        
+
         if "queryId" not in item_filter:
             # TODO, we really should throw an exception here
             return None
@@ -572,6 +580,7 @@ class Unity:
                                item_id=item_id, item_name=item_name)
 
     # Protecting Data
+    # -----------------------------------------
     def ldapServer(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('ldapServer',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
@@ -597,6 +606,7 @@ class Unity:
                                item_id=item_id, item_name=item_name)
 
     # Quality of Service
+    # -----------------------------------------
     def ioLimitPolicy(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('ioLimitPolicy',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
@@ -610,6 +620,7 @@ class Unity:
                                item_id=item_id, item_name=item_name)
 
     # Servicing the System
+    # -----------------------------------------
     def configCaptureResult(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('configCaptureResult',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
@@ -647,6 +658,7 @@ class Unity:
                                item_id=item_id, item_name=item_name)
 
     # Users and Security
+    # -----------------------------------------
     def crl(self, item_filter = None, item_id=None, item_name=None):
         return self.get_object('crl',item_filter=item_filter,
                                item_id=item_id, item_name=item_name)
@@ -676,7 +688,7 @@ class Unity:
                                item_id=item_id, item_name=item_name)
 
     # Helper Functions
-
+    # -----------------------------------------
     def delete_storageResource(self, lun_id):
         response = self.delete('/instances/storageResource/%s' % lun_id)
         return response
@@ -710,4 +722,3 @@ class Unity:
 
     def __repr__(self):
         return "<Unity Array: %s>" % self.ip_addr
-        
