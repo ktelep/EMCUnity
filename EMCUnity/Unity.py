@@ -697,7 +697,7 @@ class Unity:
         new_id = response.json()['content']['storageResource']['id']
         return self.lun(item_id=new_id)
 
-    def create_lun(self, lun_object):
+    def create_lun_from_obj(self, lun_object):
         """ Creates a new block LUN based on a lun_object being passed """
         payload = {'name': lun_object.name,
                    'lunParameters':{'pool':{'id':lun_object.pool},

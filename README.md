@@ -21,6 +21,39 @@ Although this module provides a layer of abstraction between the REST API and th
 
 ## Sample usage
 
+Creating a LUN
+
+    # Connect to the array
+    unity = Unity('unity.ktelep.local','admin','TooManySecrets')
+
+    # Gather a list of pools, we need the pool ID for LUN creation
+    pools = unity.pool()
+    first_pool = pools[0].id
+
+    # Create a lun with a new Unitylun object
+    new_lun = Unitylun(name="TestLUN",pool=first_pool,sizeTotal=50000000,
+                 description="Test Description")
+
+    # Pass it to create_lun
+    response = unity.create_lun_from_obj(new_lun)
+    print response
+
+    # Create a new lun with parameters
+    response = unity.create_lun("TestLUN2", first_pool, 50000000, "Test Desc")
+    print response
+
+
+Any object defined in the API Reference Guide is accessible as a function, for example gathering license keys shown below.  This pattern is available for any referenced object.
+
+
+    # Connect to the array
+    unity = Unity('unity.ktelep.local','admin','TooManySecrets')
+
+    unity.license()   # Returns all licenses as Unitylicense objects
+    unity.license(item_id='QUALITY_OF_SERVICE')  # Returns the QOS License
+    unity.license(item_filter='id LK "UNISPHERE%"') # Returns Licenses starting with "UNISPHERE"
+    unity.license(item_name='FAST_VP') # Returns license named FAST_VP
+
 
 Licensing
 ---------
