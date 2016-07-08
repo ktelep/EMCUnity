@@ -13,11 +13,14 @@ Although this module provides a layer of abstraction between the REST API and th
 
 [Unity Family Unisphere Management REST API Programmers' Guide](https://support.emc.com/docu69331_Unity-Family-Unisphere-Management-REST-API-Programmer's-Guide.pdf?language=en_US)
 
+As of today the module is fully functional for retrieving information from the array along with performing manual POST and DELETE requests.   Work is continuing to create helper functions to simplify common tasks.
+
 ## Installation
 
 *Prerequisites*
 
-1.  Python Requests module
+1.  Python 2.7 (Python 3 support is coming)
+2.  Requests module
 
 ## Sample usage
 
@@ -53,6 +56,25 @@ Any object defined in the API Reference Guide is accessible as a function, for e
     unity.license(item_id='QUALITY_OF_SERVICE')  # Returns the QOS License
     unity.license(item_filter='id LK "UNISPHERE%"') # Returns Licenses starting with "UNISPHERE"
     unity.license(item_name='FAST_VP') # Returns license named FAST_VP
+
+
+You can also make direct calls (GET,POST,DELETE) to the REST API
+
+    # Request for DAE instances, returns response object  
+    response = unity.get('/types/dae/instances')
+    json_data = response.json()
+
+    # Create a LUN manually (Size is in bytes)
+    payload = {'name': "NewLUN"
+               'lunParameters':{'pool':{'id':'pool_1'},
+                                        'size': 50000000}}
+
+    response = self.post('/types/storageResource/action/createLun',payload)
+
+    new_id = response.json()['content']['storageResource']['id']
+
+    # Delete a LUN manually
+    response = self.delete('/instances/storageResource/%s' % new_id)  
 
 
 Licensing

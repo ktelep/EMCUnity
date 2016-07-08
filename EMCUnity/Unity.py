@@ -720,5 +720,27 @@ class Unity:
         new_id = response.json()['content']['storageResource']['id']
         return self.lun(item_id=new_id)
 
+    def create_vmware_lun_from_obj(self, lun_object):
+        """ Creates a new block LUN based on a lun_object being passed """
+        payload = {'name': lun_object.name,
+                   'lunParameters':{'pool':{'id':lun_object.pool},
+                                    'size': lun_object.sizeTotal}}
+        print payload
+        response = self.post('/types/storageResource/action/createVmwareLun',payload)
+
+        new_id = response.json()['content']['storageResource']['id']
+        return self.lun(item_id=new_id)
+
+    def create_vmware_lun(self, lun_name, pool_id, size, lun_description=None):
+        """ Creates a new block LUN in pool_id, returns a lun object """
+        payload = {'name':lun_name,
+                   'lunParameters':{'pool':{'id':pool_id},
+                   'size':size}}
+
+        response = self.post('/types/storageResource/action/createVmwareLun',payload)
+
+        new_id = response.json()['content']['storageResource']['id']
+        return self.lun(item_id=new_id)
+
     def __repr__(self):
         return "<Unity Array: %s>" % self.ip_addr
