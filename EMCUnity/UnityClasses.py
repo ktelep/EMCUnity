@@ -1,5 +1,4 @@
 import collections
-from collections import namedtuple
 
 
 def namedtuple_defaults(typename, field_names, default_values=()):
