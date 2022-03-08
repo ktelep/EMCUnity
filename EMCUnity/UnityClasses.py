@@ -69,6 +69,7 @@ UnitybasicSystemInfo = namedtuple_defaults('UnitybasicSystemInfo', [
                                                                     'model',
                                                                     'name',
                                                                     'softwareVersion',
+                                                                    'softwareFullVersion',
                                                                     'apiVersion',
                                                                     'earliestApiVersion',
                                                                     ])
