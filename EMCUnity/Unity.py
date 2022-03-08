@@ -43,6 +43,23 @@ class Unity:
         specific fields have been requested as part of the payload
         """
 
+        def process(content):
+            """Warn about additions to the REST API"""
+            try:
+                obj = object_type(**content)
+            except TypeError:
+                good, bad = {}, {}
+                for key, value in content.items():
+                    if key in object_type._fields:
+                        good[key] = value
+                    else:
+                        bad[key] = value
+                from warnings import warn
+                warn('Unity REST API call returned unexpected fields: %r' % bad,
+                    RuntimeWarning, stacklevel=3)
+                obj = object_type(**good)
+            return obj
+
         if not payload:
             payload = dict()
 
@@ -54,11 +71,11 @@ class Unity:
         if 'entries' in response:
             returned_items = []
             for item in response['entries']:
-                returned_items.append(object_type(**item['content']))
+                returned_items.append(process(item['content']))
             return returned_items
 
         elif 'content' in response:
-            return object_type(**response['content'])
+            return process(response['content'])
 
         else:
             return None
