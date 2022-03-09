@@ -1,17 +1,17 @@
 EMCUnity
 =======================
 
-EMCUnity provides a Python interface to the EMC Unity RESTful API
+EMCUnity provides a Python interface to the Dell EMC Unity RESTful API
 
 ## Description
 
-This module has been developed to provide a pythonic interface for interacting with EMC's Unity line of mid-range storage arrays.  This module supports both Physical arrays (such as the 300/400/500/600 hybrid and all flash models) along with the UnityVSA.  
+This module has been developed to provide a pythonic interface for interacting with Dell EMC's Unity line of mid-range storage arrays.  This module supports both Physical arrays (such as the 300/400/500/600 hybrid and all flash models) along with the UnityVSA.  
 
 Although this module provides a layer of abstraction between the REST API and the developer, it is recommended that you review the following documents as a reference, particularly when referencing object names, fields that are available, and the use of filters when querying the array.
 
-[Unity Family Unisphere Management REST API Reference Guide](https://support.emc.com/docu69899_Unity_Family_Unisphere_Management_REST_API_Reference_Guide.zip?language=en_US)
+[Dell EMC Unity Unisphere Management REST API Reference Guide](https://dl.dell.com/content/manual24434307-dell-emc-unity-unisphere-management-rest-api-reference-guide-pdf.pdf?language=en-us)
 
-[Unity Family Unisphere Management REST API Programmers' Guide](https://support.emc.com/docu69331_Unity-Family-Unisphere-Management-REST-API-Programmer's-Guide.pdf?language=en_US)
+[Dell EMC Unity Family Unisphere Management REST API Programmer's Guide](https://dl.dell.com/content/docu69331-dell-emc-unity-family-unisphere-management-rest-api-programmer's-guide.pdf?language=en-us)
 
 As of today the module is fully functional for retrieving information from the array along with performing manual POST and DELETE requests.   Work is continuing to create helper functions to simplify common tasks.
 
